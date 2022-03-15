@@ -11,6 +11,8 @@ import (
 )
 
 var client *openapi.APIClient
+var token = "1e7a1e55-5df4-3d80-959a-b8528f68d785"
+var defaultHostname = "https://testcodi.multipay.mx:30801/token/CL/Payments/Authorize/5.6.1"
 
 func main() {
 
@@ -18,16 +20,16 @@ func main() {
 	configServer()
 
 	//Seteando datos para llamada
-	branchIdentification := "5"
+	branchIdentification := "2100001"
 
 	keepRequest := openapi.ApiKeepAlivePostRequest{}
 
 	keepObject := openapi.KeepAliveObject{}
 	keepData := openapi.BlockCreateObjectBlockCreate{
-		CompanyIdentification: "1",
-		SystemIdentification:  "0",
+		CompanyIdentification: "2000001",
+		SystemIdentification:  "BciPagos1.0.0",
 		BranchIdentification:  &branchIdentification,
-		POSIdentification:     "1",
+		POSIdentification:     "2110004",
 	}
 	keepObject.SetKeepAlive(keepData)
 
@@ -52,7 +54,7 @@ func main() {
 
 		json.Unmarshal(bodyBytes, &responseData)
 		fmt.Println("ResponseCode: " + fmt.Sprint(responseData.KeepAliveResponse.GetResponseCode()))
-		fmt.Println("ResponseMessage: " + responseData.KeepAliveResponse.GetResponseMessage())
+		fmt.Println("ResponseMessage: " + fmt.Sprint(responseData.KeepAliveResponse.GetResponseMessage()))
 	}
 	return
 }
@@ -60,10 +62,13 @@ func main() {
 func configServer() {
 
 	conf := openapi.NewConfiguration()
+	conf.AddDefaultHeader("Authorization", "Bearer "+token)
 	//Si vienen args
 	if len(os.Args) > 1 && strings.Contains(os.Args[1], "--hostname=") {
 		hostname := strings.Replace(os.Args[1], "--hostname=", "", 1)
 		conf.Servers[0].URL = hostname
+	} else {
+		conf.Servers[0].URL = defaultHostname
 	}
 	client = openapi.NewAPIClient(conf)
 	println("Utilizando hostname: " + client.GetConfig().Servers[0].URL)

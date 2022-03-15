@@ -6,7 +6,8 @@
 - Se agregaron todas las dependencias necesarias para la ejecucion del codigo generado
 
 # ERRORES:
-- El codigo generado con openapi presentó errores en el model de "model_sale_object_sale_values" ya que este esta definido como "string, number, integer, boolean y object" lo cual no funciona bien al momento de generar el codigo de golang. Para solucionar este error de complicacion se editó el codigo dejando este value solo como tipo string
+- El codigo generado con openapi presentó errores en los tipos de datos multiples.
+  - Se solucionó editando el yaml para dejar los tipos de datos multiples como string
 
 ## Uso
 
